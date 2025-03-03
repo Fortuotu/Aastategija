@@ -7,6 +7,10 @@ app = Flask(__name__)
 session = {}
 correct_car = {}
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 def get_random_cars():
     # Connect to the database
     conn = sqlite3.connect('cars.db')
