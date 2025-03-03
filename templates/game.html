@@ -1,272 +1,205 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
+        <a href="/" class="absolute top-4 left-4 flex items-center gap-2 px-4 py-2 bg-white shadow-md rounded-full border border-gray-300 hover:shadow-lg transition">
+        <img src="https://cdn-icons-png.flaticon.com/32/25/25694.png" alt="Home" class="w-6 h-6">
+        <span class="text-gray-700 font-semibold">Avalehele</span>
+</a>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mäng</title>
+    <title>Automaksu Mäng</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             text-align: center;
+            background-color: #f4f4f4;
         }
-
-        h1 {
-            color: #2c3e50;
-        }
-
-        h2 {
-            color: #34495e;
-            margin: 20px 0;
-        }
-
-        p {
-            font-size: 1.1rem;
-            margin: 10px 0;
-        }
-
-        /* Styling the car container */
-        .car-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        /* Style for car info */
-        .car {
-            background-color: #fff;
+        <a href="/" class="flex items-center gap-2 px-4 py-2 bg-white shadow-md rounded-full border border-gray-300 hover:shadow-lg transition">
+    <img src="https://cdn-icons-png.flaticon.com/32/25/25694.png" alt="Home" class="w-6 h-6">
+    <span class="text-gray-700 font-semibold">Avalehele</span>
+</a>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            max-width: 300px;
-            text-align: left;
-            vertical-align: top;
-            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        .car h3 {
-            font-size: 1.4rem;
-            color: #2980b9;
-            margin-bottom: 15px;
-        }
-
-        .car p {
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
-
-        /* Styling the form */
-        #guessForm {
-            margin-top: 20px;
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        label {
-            font-size: 1.2rem;
-            display: block;
+        .header {
+            font-size: 22px;
+            font-weight: bold;
             margin-bottom: 10px;
         }
-
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-
-        button {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #2ecc71;
-        }
-
-        /* Styling the result div */
-        #result {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            padding: 10px;
-            background-color: #ecf0f1;
-            border-radius: 5px;
-            width: 80%;
-            max-width: 400px;
+        .score {
+            font-size: 18px;
             margin-bottom: 20px;
         }
-
-        /* Play Again button */
-        #playAgainBtn {
-            background-color: #3498db;
+        .tax-box {
+            background: #007bff;
             color: white;
-            padding: 12px 24px;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .car-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .car-box {
+            width: 45%;
+            background: white;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
+        }
+        .car-box:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+        .car-box.selected {
+            border-color: green;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .overlay-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .overlay button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background: red;
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-            display: none;
-        }
-
-        #playAgainBtn:hover {
-            background-color: #2980b9;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .car-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .car {
-                max-width: 90%;
-            }
-
-            #result {
-                width: 90%;
-            }
-
-            #guessForm {
-                flex-direction: column;
-                align-items: center;
-            }
         }
     </style>
 </head>
 <body>
-    <h1>Arva, milline auto vastab järgmistele andmetele:</h1>
-    <p>Aastamaks: <span id="car-tax">Loading...</span> EUR</p>
-    <p>Registreerimistasu: <span id="registration-fee">Loading...</span> EUR</p>
 
-    <div class="car-container">
-        <div class="car" id="car1">
-            <h3><span id="car1-mark">Loading...</span></h3>
-            <p>📅 Registreerimine: <span id="car1-reg">Loading...</span></p>
-            <p>⚡ Võimsus: <span id="car1-power">Loading...</span> kW</p>
-            <p>🔧 Mootor: <span id="car1-engine-capacity">Loading...</span> cm³</p>
-            <p>⛽ Kütus: <span id="car1-fuel">Loading...</span></p>
-            <p>⚖️ Täismass: <span id="car1-weight">Loading...</span> kg</p>
-            <p>🏷️ Kere: <span id="car1-body">Loading...</span></p>
-        </div>
+<div class="container">
+    <div class="header">🎯 Millise auto maksud need on?</div>
+    <div class="score">Punktid: <span id="score">0</span></div>
 
-        <div class="car" id="car2">
-            <h3><span id="car2-mark">Loading...</span></h3>
-            <p>📅 Registreerimine: <span id="car2-reg">Loading...</span></p>
-            <p>⚡ Võimsus: <span id="car2-power">Loading...</span> kW</p>
-            <p>🔧 Mootor: <span id="car2-engine-capacity">Loading...</span> cm³</p>
-            <p>⛽ Kütus: <span id="car2-fuel">Loading...</span></p>
-            <p>⚖️ Täismass: <span id="car2-weight">Loading...</span> kg</p>
-            <p>🏷️ Kere: <span id="car2-body">Loading...</span></p>
-        </div>
+    <div class="tax-box">
+        <b>🚘 Millise auto maksud need on?</b><br>
+        Aastamaks: <span id="aastamaks">-</span> € <br>
+        Registreerimistasu: <span id="regtasu">-</span> €
     </div>
 
-    <!-- The form for user to submit the guess -->
-    <form id="guessForm">
-        <div>
-            <input type="radio" name="car_guess" value="1" id="car_guess_1" required> Auto 1
+    <div class="car-container">
+        <div class="car-box" id="car1" onclick="selectCar(1)">
+            <b>🚗 <span id="car1-name"></span></b> <br>
+            📅 <b>Registreeritud:</b> <span id="car1-reg"></span><br>
+            ⚡ <b>Võimsus:</b> <span id="car1-power"></span> kW<br>
+            🔧 <b>Mootor:</b> <span id="car1-engine"></span> cm³<br>
+            ⛽ <b>Kütus:</b> <span id="car1-fuel"></span><br>
+            ⚖️ <b>Täismass:</b> <span id="car1-weight"></span> kg<br>
+            🚙 <b>Kere:</b> <span id="car1-body"></span>
         </div>
-        <div>
-            <input type="radio" name="car_guess" value="2" id="car_guess_2" required> Auto 2
+        <div class="car-box" id="car2" onclick="selectCar(2)">
+            <b>🚗 <span id="car2-name"></span></b> <br>
+            📅 <b>Registreeritud:</b> <span id="car2-reg"></span><br>
+            ⚡ <b>Võimsus:</b> <span id="car2-power"></span> kW<br>
+            🔧 <b>Mootor:</b> <span id="car2-engine"></span> cm³<br>
+            ⛽ <b>Kütus:</b> <span id="car2-fuel"></span><br>
+            ⚖️ <b>Täismass:</b> <span id="car2-weight"></span> kg<br>
+            🚙 <b>Kere:</b> <span id="car2-body"></span>
         </div>
-        <button type="submit">Arva</button>
-    </form>
+    </div>
+</div>
 
-    <div id="result"></div>
+<!-- Punase kastiga ekraan, kui vastus on vale -->
+<div class="overlay" id="overlay">
+    <div class="overlay-content">
+        ❌ Vale vastus! <br>
+        Punktid: <span id="final-score"></span> <br>
+        <button onclick="restartGame()">🔄 Mängi uuesti</button>
+    </div>
+</div>
 
-    <button id="playAgainBtn" style="display: none;">Play Again</button>
+<script>
+    let correctCar = null;
+    let score = 0;
 
-    <script>
-        $(document).ready(function() {
-            // Function to fetch new cars
-            function fetchNewCars() {
-                $.ajax({
-                    url: '/get_random_cars',  // The endpoint to get random car data
-                    method: 'GET',
-                    success: function(response) {
-                        // If response contains cars, update the page
-                        if (response.car1 && response.car2) {
-                            // Car 1
-                            $('#car1-mark').text(response.car1.mark + ' ' + response.car1.model);
-                            $('#car1-reg').text(response.car1.reg);
-                            $('#car1-power').text(response.car1.power);
-                            $('#car1-engine-capacity').text(response.car1.engine_capacity);
-                            $('#car1-fuel').text(response.car1.fuel);
-                            $('#car1-weight').text(response.car1.weight);
-                            $('#car1-body').text(response.car1.body);
+    function fetchCars() {
+        $.getJSON("/get_random_cars", function(data) {
+            if (data.car1 && data.car2) {
+                $("#car1-name").text(data.car1.mark + " " + data.car1.model);
+                $("#car1-reg").text(data.car1.reg);
+                $("#car1-power").text(data.car1.power);
+                $("#car1-engine").text(data.car1.engine_capacity);
+                $("#car1-fuel").text(data.car1.fuel);
+                $("#car1-weight").text(data.car1.weight);
+                $("#car1-body").text(data.car1.body);
 
-                            // Car 2
-                            $('#car2-mark').text(response.car2.mark + ' ' + response.car2.model);
-                            $('#car2-reg').text(response.car2.reg);
-                            $('#car2-power').text(response.car2.power);
-                            $('#car2-engine-capacity').text(response.car2.engine_capacity);
-                            $('#car2-fuel').text(response.car2.fuel);
-                            $('#car2-weight').text(response.car2.weight);
-                            $('#car2-body').text(response.car2.body);
+                $("#car2-name").text(data.car2.mark + " " + data.car2.model);
+                $("#car2-reg").text(data.car2.reg);
+                $("#car2-power").text(data.car2.power);
+                $("#car2-engine").text(data.car2.engine_capacity);
+                $("#car2-fuel").text(data.car2.fuel);
+                $("#car2-weight").text(data.car2.weight);
+                $("#car2-body").text(data.car2.body);
 
-                            // Set the tax and registration fee
-                            $('#car-tax').text(response.car1.tax);
-                            $('#registration-fee').text(response.car1.registration_fee);
-                        }
-                    }
-                });
+                let randomCar = Math.random() < 0.5 ? "car1" : "car2";
+                correctCar = randomCar;
+                $("#aastamaks").text(data[randomCar].tax);
+                $("#regtasu").text(data[randomCar].registration_fee);
             }
-
-            // Initially fetch the cars when the page loads
-            fetchNewCars();
-
-            // When the form is submitted
-            $('#guessForm').on('submit', function(e) {
-                e.preventDefault(); // Prevent the default form submission
-
-                // Get the selected guess (1 or 2)
-                var carGuess = $('input[name="car_guess"]:checked').val();
-
-                // Send the AJAX request to the server
-                $.ajax({
-                    url: '/guess',  // The route for handling the guess
-                    method: 'POST',
-                    data: { car_guess: carGuess },
-                    success: function(response) {
-                        // Update the result div with the response from the server
-                        $('#result').html(response);
-                        $('#playAgainBtn').show();
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle errors if necessary
-                        $('#result').html("Error: " + error);
-                    }
-                });
-            });
-
-            $('#playAgainBtn').on('click', function() {
-                // Reset the guess form
-                $('#guessForm')[0].reset();
-                $('#result').empty(); // Clear the result div
-
-                // Fetch new cars
-                fetchNewCars();
-
-                // Hide the play again button
-                $(this).hide();
-            });
         });
-    </script>
+    }
+
+    function selectCar(carNumber) {
+        $(".car-box").removeClass("selected");
+        $("#car" + carNumber).addClass("selected");
+
+        $.post("/guess", { car_guess: carNumber }, function(response) {
+            if (response.trim() === "Correct!") {
+                alert("✅ Õige vastus!");
+                score += 1;
+                $("#score").text(score);
+                fetchCars();
+            } else {
+                $("#final-score").text(score);
+                $("#overlay").css("display", "flex");
+            }
+        });
+    }
+
+    function restartGame() {
+        score = 0;
+        $("#score").text(score);
+        $("#overlay").css("display", "none");
+        fetchCars();
+    }
+
+    $(document).ready(function() {
+        fetchCars();
+    });
+</script>
+
 </body>
 </html>
