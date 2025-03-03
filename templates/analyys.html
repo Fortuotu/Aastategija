@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automaksu Analüüs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .slider {
+            font-family: monospace;
+            margin: 10px 0;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .example-cars {
+            margin-top: 20px;
+        }
+
+        .car-card {
+            background: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        async function fetchAnalysis() {
+            const userTax = document.getElementById('userTax').value;
+            if (!userTax) {
+                alert("Palun sisesta aastamaks!");
+                return;
+            }
+
+            try {
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_tax: parseFloat(userTax) })
+                });
+
+                const data = await response.json();
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                document.getElementById('higherPercentage').innerText = `Suurema maksuga autod: ${data.higher_percentage}% (${data.higher_tax_count} autot)`;
+                document.getElementById('lowerPercentage').innerText = `Väiksema maksuga autod: ${data.lower_percentage}% (${data.lower_tax_count} autot)`;
+                document.getElementById('averageTax').innerText = `Keskmine aastamaks: ${data.average_automaks}€`;
+
+                renderSlider(userTax, data.average_automaks);
+                renderExampleCars(data.example_cars);
+            } catch (error) {
+                console.error("Viga päringus:", error);
+            }
+        }
+
+        function renderSlider(userTax, averageTax) {
+            const maxTax = 1000;
+            const sliderLength = 50;
+            let slider = Array(sliderLength).fill('=');
+            
+            slider[Math.min(sliderLength - 1, Math.floor(userTax / maxTax * sliderLength))] = '|';
+            slider[Math.min(sliderLength - 1, Math.floor(averageTax / maxTax * sliderLength))] = 'O';
+
+            document.getElementById('slider').innerText = `[${slider.join('')}]`;
+        }
+
+        function renderExampleCars(cars) {
+            const carsContainer = document.getElementById('exampleCars');
+            carsContainer.innerHTML = "";
+            if (cars.length === 0) {
+                carsContainer.innerHTML = "<p>Ei leitud autosid sarnase automaksuga.</p>";
+                return;
+            }
+
+            cars.forEach(car => {
+                const carInfo = document.createElement('div');
+                carInfo.classList.add('car-card');
+                carInfo.innerHTML = `🚗 <strong>${car.mark} ${car.model}</strong> <br> 📅 Reg: ${car.registration} | ⚡ ${car.power} kW | ⛽ ${car.fuel} <br> 💰 Aastamaks: ${car.automaks}€ | 🏷️ Reg: ${car.regtasu}€`;
+                carsContainer.appendChild(carInfo);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Automaksu Analüüs</h1>
+    <div class="container">
+        <input type="number" id="userTax" placeholder="Sisesta aastamaks (€)">
+        <button onclick="fetchAnalysis()">Analüüsi</button>
+        
+        <div class="results">
+            <h3 id="higherPercentage"></h3>
+            <h3 id="lowerPercentage"></h3>
+            <h3 id="averageTax"></h3>
+
+            <div class="slider">
+                <div id="slider"></div>
+            </div>
+
+            <h3>Näidised autod:</h3>
+            <div id="exampleCars" class="example-cars"></div>
+        </div>
+    </div>
+</body>
+</html>
