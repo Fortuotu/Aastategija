@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Tax Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+        canvas {
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Car Tax Dashboard - Europe</h1>
+
+        <!-- Foliumi kaart -->
+        <iframe src="{{ map_path }}"></iframe>
+
+        <h2>Annual Tax Revenue per Motor Vehicle (2022)</h2>
+        <canvas id="taxChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('taxChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Belgium", "Finland", "Ireland", "Austria", "Denmark", "Netherlands", "Germany", "Italy", "France", "Sweden", "Portugal", "Greece", "Spain"],
+                datasets: [{
+                    label: 'Tax Revenue (€)',
+                    data: [2892, 2723, 2438, 2409, 2217, 2160, 1764, 1727, 1625, 1543, 1290, 1264, 1148],
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
